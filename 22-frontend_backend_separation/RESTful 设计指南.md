@@ -1,23 +1,27 @@
 
-网络应用程序，分为前端和后端两个部分。当前的发展趋势，就是前端设备层出不穷（手机、平板、桌面电脑、其他专用设备......）。
+## 背景
 
-因此，必须有一种统一的机制，方便不同的前端设备与后端进行通信。这导致 API 构架的流行，甚至出现 `API First` 的设计思想。[RESTful API](https://en.wikipedia.org/wiki/Representational_state_transfer)是目前比较成熟的一套互联网应用程序的 API 设计理论。
+网络应用程序，分为前端和后端两个部分。
+
+当前的发展趋势，就是前端设备层出不穷。因此，必须有一种统一的机制，方便不同的前端设备与后端进行通信。这导致 API 构架的流行，甚至出现 `API First` 的设计思想。
+
+[RESTful API](https://en.wikipedia.org/wiki/Representational_state_transfer)是目前比较成熟的一套互联网应用程序的 API 设计理论。
 
 
 ## 一、协议
 
-API 与用户的通信协议，总是使用 `HTTPS` 协议。
+API 与用户的通信协议，必须使用 `HTTPS` 协议。
 
 
 ## 二、域名
 
-应该尽量将 API 部署在专用域名之下。
+应该将 API 部署在专用域名之下。
 
 ```
 https://api.example.com
 ```
 
-如果确定API很简单，不会有进一步扩展，可以考虑放在主域名下。
+如果确定 API 很简单，不会有进一步扩展，可以考虑放在主域名下。
 
 ```
 https://example.org/api/
@@ -32,14 +36,14 @@ https://example.org/api/
 https://api.example.com/v1/
 ```
 
-另一种做法是，将版本号放在 HTTP 头信息中，如放在 `x-api-version` 中， 但不如放入URL方便和直观。[Github](https://developer.github.com/v3/media/#request-specific-version)采用这种做法。
+另一种做法是，将版本号放在 HTTP 头信息中，如放在 `x-api-version` 中， 但不如放入 URL 方便和直观。[Github](https://developer.github.com/v3/media/#request-specific-version)采用这种做法。
 
 
 ## 四、路径（Endpoint）
 
-路径又称"终点"（endpoint），表示 API 的具体网址。
+路径又称 "终点"（endpoint），表示 API 的具体网址。
 
-在 RESTful 架构中，每个网址代表一种资源（resource），所以网址中不能有动词，只能有名词（可复数），而且所用的名词往往与数据库的表格名对应。一般来说，数据库中的表都是同种记录的"集合"（collection），所以API中的名词也应该使用复数。
+在 RESTful 架构中，每个网址代表一种资源，所以网址中不能有动词，只能有名词（可复数），而且所用的名词往往与数据库的表格名对应。一般来说，数据库中的表都是同种记录的"集合"（collection），所以 API 中的名词也应该使用复数。
 
 举例来说，有一个 API 提供动物园（zoo）的信息，还包括各种动物和雇员的信息，则它的路径应该设计成下面这样。
 
@@ -55,24 +59,24 @@ https://api.example.com/v1/employees
 对于资源的具体操作类型，由 HTTP 动词表示。常用的 HTTP 动词有下面前五个（括号里是对应的SQL命令），后面两个 HTTP 动词不常用。
 
 *   GET（SELECT）：从服务器取出资源（一项或多项）。
-    + 完成请求后返回状态码 `200 OK`
-    + 完成请求后需要返回被请求的资源详细信息
+    *   完成请求后返回状态码 `200 OK`
+    *   完成请求后需要返回被请求的资源详细信息
 
 *   POST（CREATE）：在服务器新建一个资源。
-    + 创建完成后返回状态码 `201 Created`
-    + 完成请求后需要返回被创建的资源详细信息
+    *   创建完成后返回状态码 `201 Created`
+    *   完成请求后需要返回被创建的资源详细信息
 
 *   PUT（UPDATE）：在服务器更新资源（客户端提供改变后的完整资源）或者创建指定身份的资源，比如创建 id 为 123 的某个资源。
-    + 如果是创建了资源，则返回 `201 Created`
-    + 如果是替换了资源，则返回 `200 OK`
-    + 完成请求后需要返回被修改的资源详细信息。
+    *   如果是创建了资源，则返回 `201 Created`
+    *   如果是替换了资源，则返回 `200 OK`
+    *   完成请求后需要返回被修改的资源详细信息。
 
 *   PATCH（UPDATE）：在服务器更新资源（客户端提供改变的属性）。
-    + 完成请求后返回状态码 `200 OK`
-    + 完成请求后需要返回被修改的资源详细信息
+    *   完成请求后返回状态码 `200 OK`
+    *   完成请求后需要返回被修改的资源详细信息
 
 *   DELETE（DELETE）：从服务器删除资源。
-    + 完成请求后返回状态码 `204 No Content`
+    *   完成请求后返回状态码 `204 No Content`
 
 *   HEAD：获取资源的元数据。
 
@@ -110,33 +114,33 @@ https://api.example.com/v1/employees
 
 服务器向用户返回的状态码和提示信息，常见的有以下一些（方括号中是该状态码对应的HTTP动词）。
 
-- 2xx: 请求成功
+*   2xx: 请求成功
 
-    *   200 OK - \[GET\]：服务器成功返回用户请求的数据，该操作是幂等的（Idempotent）。
-    *   201 CREATED - \[POST/PUT/PATCH\]：用户新建或修改数据成功。
-    *   202 Accepted - \[\*\]：接受请求，但无法立即完成创建行为，比如其中涉及到一个需要花费若干小时才能完成的任务。返回的实体中应该包含当前状态的信息，以及指向处理状态监视器或状态预测的指针，以便客户端能够获取最新状态。
-    *   204 NO CONTENT - \[DELETE\]：请求执行成功，不返回相应资源数据，如 `PATCH` ， `DELETE` 成功。
+    *   200 OK *   \[GET\]：服务器成功返回用户请求的数据，该操作是幂等的（Idempotent）。
+    *   201 CREATED *   \[POST/PUT/PATCH\]：用户新建或修改数据成功。
+    *   202 Accepted *   \[\*\]：接受请求，但无法立即完成创建行为，比如其中涉及到一个需要花费若干小时才能完成的任务。返回的实体中应该包含当前状态的信息，以及指向处理状态监视器或状态预测的指针，以便客户端能够获取最新状态。
+    *   204 NO CONTENT *   \[DELETE\]：请求执行成功，不返回相应资源数据，如 `PATCH` ， `DELETE` 成功。
 
--  3xx: 重定向，重定向的新地址都需要在响应头 `Location` 中返回
+*    3xx: 重定向，重定向的新地址都需要在响应头 `Location` 中返回
 
     *   301 Moved Permanently : 被请求的资源已永久移动到新位置
     *   302 Found : 请求的资源现在临时从不同的 URI 响应请求
     *   303 See Other : 对应当前请求的响应可以在另一个 URI 上被找到，客户端应该使用 `GET` 方法进行请求
     *   307 Temporary Redirect : 对应当前请求的响应可以在另一个 URI 上被找到，客户端应该保持原有的请求方法进行请求
 
-- 4xx：客户端错误
+*   4xx：客户端错误
     
-    *   400 INVALID REQUEST - \[POST/PUT/PATCH\]：用户发出的请求有错误，服务器没有进行新建或修改数据的操作，该操作是幂等的。
-    *   401 Unauthorized - \[\*\]：需要验证用户身份，如果服务器就算是身份验证后也不允许客户访问资源，应该响应 `403 Forbidden`。
-    *   403 Forbidden - \[\*\]: 服务器拒绝执行。
-    *   404 NOT FOUND - \[\*\]：用户发出的请求针对的是不存在的记录，服务器没有进行操作，该操作是幂等的。
-    *   406 Not Acceptable - \[GET\]：用户请求的格式不可得（比如用户请求JSON格式，但是只有XML格式）,但响应里会包含服务端能够给出的格式的数据，并在 `Content-Type` 中声明格式名称。
+    *   400 INVALID REQUEST *   \[POST/PUT/PATCH\]：用户发出的请求有错误，服务器没有进行新建或修改数据的操作，该操作是幂等的。
+    *   401 Unauthorized *   \[\*\]：需要验证用户身份，如果服务器就算是身份验证后也不允许客户访问资源，应该响应 `403 Forbidden`。
+    *   403 Forbidden *   \[\*\]: 服务器拒绝执行。
+    *   404 NOT FOUND *   \[\*\]：用户发出的请求针对的是不存在的记录，服务器没有进行操作，该操作是幂等的。
+    *   406 Not Acceptable *   \[GET\]：用户请求的格式不可得（比如用户请求JSON格式，但是只有XML格式）,但响应里会包含服务端能够给出的格式的数据，并在 `Content-Type` 中声明格式名称。
     *   410 Gone -\[GET\]： 被请求的资源已被删除，只有在确定了这种情况是永久性的时候才可以使用，否则建议使用 `404 Not Found`
-    *   422 Unprocesable entity - \[POST/PUT/PATCH\] 当创建一个对象时，发生一个验证错误。
+    *   422 Unprocesable entity *   \[POST/PUT/PATCH\] 当创建一个对象时，发生一个验证错误。
 
-- 5xx: 服务器错误
+*   5xx: 服务器错误
 
-    *   500 INTERNAL SERVER ERROR - \[\*\]：服务器发生错误，用户将无法判断发出的请求是否成功。
+    *   500 INTERNAL SERVER ERROR *   \[\*\]：服务器发生错误，用户将无法判断发出的请求是否成功。
 
 状态码的完全列表参见[这里](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html)。
 
@@ -224,12 +228,12 @@ https://api.example.com/v1/employees
 
 针对不同操作，服务器向用户返回的结果应该符合以下规范。
 
-> *   GET /collection：返回资源对象的列表（数组）
-> *   GET /collection/resource：返回单个资源对象
-> *   POST /collection：返回新生成的资源对象
-> *   PUT /collection/resource：返回完整的资源对象
-> *   PATCH /collection/resource：返回完整的资源对象
-> *   DELETE /collection/resource：返回一个空文档
+*   GET /collection：返回资源对象的列表（数组）
+*   GET /collection/resource：返回单个资源对象
+*   POST /collection：返回新生成的资源对象
+*   PUT /collection/resource：返回完整的资源对象
+*   PATCH /collection/resource：返回完整的资源对象
+*   DELETE /collection/resource：返回一个空文档
 
 
 ## 十、Hypermedia API
@@ -275,12 +279,12 @@ Hypermedia API 的设计被称为[HATEOAS](https://en.wikipedia.org/wiki/HATEOAS
 
 ## 十一、其他
 
-- API的身份认证应该使用[OAuth 2.0](https://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)框架。
+*   API的身份认证应该使用[OAuth 2.0](https://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html)框架。
 
-- 服务器返回的数据格式，应该尽量使用 JSON，避免使用 XML。
+*   服务器返回的数据格式，应该尽量使用 JSON，避免使用 XML。
 
 
 ## reference
 
-- http://www.ruanyifeng.com/blog/2014/05/restful_api.html
+*   http://www.ruanyifeng.com/blog/2014/05/restful_api.html
 

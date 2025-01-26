@@ -23,7 +23,7 @@ MySQL 数据库与 Oracle、 SQL Server 等数据库相比，有其内核上的�
 
 ### 2.1.2 库
 
-1.  【强制】遵守上述全部 [一般命名规则](#21-)。
+1.  【强制】遵守上述全部 [一般命名规则](#211-一般命名规则)。
 
 2.  【强制】库的名称格式：`业务系统名称_子系统名`。
 
@@ -37,15 +37,15 @@ MySQL 数据库与 Oracle、 SQL Server 等数据库相比，有其内核上的�
 
 ### 2.1.3 表
 
-1.  【强制】遵守以上全部[一般命名规则](#21-)。
+1.  【强制】遵守以上全部[一般命名规则](#211-一般命名规则)。
 
 2.  【强制】相关模块的表名与表名之间尽量体现 join 的关系，如 `user` 表和 `user_login` 表。
 
 3.  【强制】创建表时必须显式指定字符集为 utf8 或 utf8mb4。
 
 4.  【强制】创建表时必须显式指定表存储引擎类型，如无特殊需求，一律为 InnoDB。
-    因为 InnoDB 表支持事务、行锁、宕机恢复、MVCC 等关系型数据库重要特性，为业界使用最多的 MySQL 存储引擎。而这是其它大多数存储引擎不具备的，因此首推 InnoDB。
-    当需要使用除 InnoDB/MyISAM/Memory 以外的存储引擎时，必须通过 DBA 审核才能在生产环境中使用。
+           因为 InnoDB 表支持事务、行锁、宕机恢复、MVCC 等关系型数据库重要特性，为业界使用最多的 MySQL 存储引擎。而这是其它大多数存储引擎不具备的，因此首推 InnoDB。
+           当需要使用除 InnoDB/MyISAM/Memory 以外的存储引擎时，必须通过 DBA 审核才能在生产环境中使用。
 
 5.  【强制】建表必须有 comment。
 
@@ -68,7 +68,7 @@ MySQL 数据库与 Oracle、 SQL Server 等数据库相比，有其内核上的�
 
 ### 2.1.4 字段
 
-1.  【强制】遵守以上全部[一般命名规则](#21-)。
+1.  【强制】遵守以上全部[一般命名规则](#211-一般命名规则)。
 
 2.  【建议】尽可能选择短的或一两个单词。
 
@@ -313,7 +313,7 @@ comment = '用户基本信息';
      
     // 这要会更好(伪代码)：
     ret = "SELECT count(*) FROM user";
-    rand(0, ret [0] - 1);
+    rand(0, ret [0] - 1);
     "SELECT username FROM user LIMIT $rand, 1";
     ```
 
@@ -377,14 +377,14 @@ comment = '用户基本信息';
     select id from t where num=@num
     
     --可以改为强制查询使用索引：
-    select id from t with(index(索引名)) where num= @num ;
+    select id from t with(index(索引名)) where num= @num ;
     ```
 
 9.  【强制】应尽量避免在 where 子句中对字段进行表达式操作、函数操作和算术运算，这将导致引擎放弃使用索引而进行全表扫描。如：
     ```
     select id from t where num/2=100;
-    select id from t where substring(name,1,3)='abc';  --name以abc开头的id
-    select id from t where datediff(day,createdate,'2005-11-30')=0;  --‘2005-11-30’生成的id
+    select id from t where substring(name,1,3)='abc';  --name以abc开头的id
+    select id from t where datediff(day,createdate,'2005-11-30')=0;  --‘2005-11-30’生成的id
     
     --应改为:
     select id from t where num=100\*2;
@@ -514,11 +514,11 @@ comment = '用户基本信息';
 
     对于大多数的数据库引擎来说，硬盘操作可能是最重大的瓶颈。所以，把你的数据变得紧凑会对这种情况非常有帮助，因为这减少了对硬盘的访问。
     
-    参看 MySQL 的文档 [Storage Requirements](http://dev.MySQL.com/doc/refman/5.0/en/storage-requirements.html) 查看所有的数据类型。
+    参看 MySQL 的文档 [Storage Requirements](http://dev.MySQL.com/doc/refman/5.0/en/storage-requirements.html) 查看所有的数据类型。
 
     如果一个表只会有几列罢了（比如说字典表，配置表），那么，我们就没有理由使用 `INT` 来做主键，使用 `MEDIUMINT`, `SMALLINT` 或是更小的 `TINYINT` 会更经济一些。如果你不需要记录时间，使用 `DATE` 要比 `DATETIME` 好得多。
 
-    当然，你也需要留够足够的扩展空间，不然，你日后来干这个事，你会死的很难看，参看[Slashdot 的例子](http://news.slashdot.org/article.pl?sid=06/11/09/1534204) （2009年11月06日），一个简单的 `ALTER TABLE` 语句花了3个多小时，因为里面有一千六百万条数据。
+    当然，你也需要留够足够的扩展空间，不然，你日后来干这个事，你会死的很难看，参看[Slashdot 的例子](http://news.slashdot.org/article.pl?sid=06/11/09/1534204) （2009年11月06日），一个简单的 `ALTER TABLE` 语句花了3个多小时，因为里面有一千六百万条数据。
 
 4.  减少同数据库的交互次数
 

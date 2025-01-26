@@ -18,15 +18,14 @@
 
 # 各类开发环境缩写
 
-英文缩写 | 英文 | 中文 
--------- | --- | --- 
-DEV      | development | 开发 
-SIT      | System Integrate Test | 系统整合测试（内测）
-UAT      | User Acceptance Test | 用户验收测试
-PET      | Performance Evaluation Test | 性能评估测试（压测）
-SIM      | simulation | 仿真
-PRD/PROD | production | 产品/正式/生产
-
+| 英文缩写     | 英文                          | 中文         |
+|----------|-----------------------------|------------|
+| DEV      | development                 | 开发         |
+| SIT      | System Integrate Test       | 系统整合测试（内测） |
+| UAT      | User Acceptance Test        | 用户验收测试     |
+| PET      | Performance Evaluation Test | 性能评估测试（压测） |
+| SIM      | simulation                  | 仿真         |
+| PRD/PROD | production                  | 产品/正式/生产   |
 
 - 开发环境(DEV)：开发环境是程序猿们专门用于开发的服务器，配置可以比较随意，为了开发调试方便，一般打开全部错误报告。
 

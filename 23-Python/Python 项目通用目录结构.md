@@ -1,23 +1,8 @@
----
-title: Python 项目通用目录结构
-subtitle: 
-author: Lepeng
-catalog: true
-comments: true
-header-img: img/header_img/archive-bg.jpg
-tags:
-- Python
-categories:
-- Python
-date: 2021-07-30
-link: 
-- https://stackoverflow.com/questions/193161/what-is-the-best-project-structure-for-a-python-application
-- https://blog.ionelmc.ro/2014/05/25/python-packaging/
----
+
 
 # 目录结构
 
-Stackoverflow 上有人提出了[这个问题](http://stackoverflow.com/questions/193161/what-is-the-best-project-structure-for-a-python-application)上，大家对Python目录结构有很多自己的看法，也有很多共识，结合这么多年的开发经验，我总结了自己的项目结构。
+Stackoverflow 上有人提出了[这个问题](http://stackoverflow.com/questions/193161/what-is-the-best-project-structure-for-a-python-application)上，大家对 Python 目录结构有很多自己的看法，也有很多共识，结合这么多年的开发经验，我总结了自己的项目结构。
 
 假设你的项目名为 projectname, 建议的目录结构如下:
 
@@ -29,42 +14,43 @@ Projectname/
 |-- lib/  # C-language libraries
 |
 |-- projectname/  
-|   |-- __init__.py
-|   |-- main.py
 |   |-- tests/
 |   |   |-- __init__.py
 |   |   |-- test_main.py
+|   |
+|   |-- conf/
+|   |   |-- conf.py  # 配置文件
+|   |
+|   |-- __init__.py
+|   |-- main.py
 |
 |-- docs/
-|   |-- conf.py  # 配置文件
 |   |-- abc.rst
 |
 |-- apidoc/
 |
+|-- .gitignore
 |-- setup.py
 |-- requirements.txt
 |-- README.md
 |-- LICENSE.txt
 ```
 
+
 # 项目名或者目录名
 
-0.  `目录名`：将目录命名为与你的项目相关的名称。例如，项目名为`Twisted`，将源文件的目录命名为 `Twisted`。当你发布时，你应该包含一个版本号后缀：Twisted-2.5
-    1.  如果您的项目是单个 Python 源文件，则将其放入目录中，并将其命名为与您的项目相关的名称。例如，`Twisted/twisted.py`。
-    2.  如果您需要多个源文件，建议创建一个包（`Twisted/twisted/` 和 `Twisted/twisted/__init__.py`）并将源文件放入其中。例如 `Twisted/twisted/main.py`
+`目录名`：将目录命名为与你的项目相关的名称。例如，项目名为`Twisted`，将源文件的目录命名为 `Twisted`。当你发布时，你应该包含一个版本号后缀：Twisted-2.5
+1.  如果项目是单个 Python 文件，则将其放入目录中，并将其命名为与项目相关的名称。例如，`Twisted/twisted.py`
+2.  如果项目是多个源文件，建议创建一个包（`Twisted/twisted/` 和 `Twisted/twisted/__init__.py`）并将源文件放入其中。入口文件设置为 `Twisted/twisted/main.py`
 
 
 # 顶级目录
 
 1. `源代码存放目录`: 源代码中的所有模块、包都应该放在此目录而不要置于顶层目录，程序的入口建议命名为 `main.py`。源代码目录有多种命名方式：
-    - 将源代码目录命名`项目名称`，如上面提到的 `Twisted/twisted/`
-    - 将源代码目录命名为`src`
-    - Python 不像 Java 或 C 那样区分/src、/lib 和 /bin，某些人认为 /src 作为顶级目录毫无意义，因此这个目录可以是应用程序的顶级架构，如下：
-        - /foo
-        - /bar
-        - /baz
-    - 将源代码目录命名 `apps` 
-    这个需要名字需要仁者见仁智者见智，不同的情况使用不同的命名。
+    *   将源代码目录命名`项目名称`，如上面提到的 `Twisted/twisted/`
+    *   将源代码目录命名为`src`
+    *   将源代码目录命名 `apps` 
+    这个名字仁者见仁智者见智，根据自己的情况使用不同的命名。
 
 2.  `bin/` 或者 `script/`: 存放项目的一些可执行文件。
     里面的文件不要给它们 `.py` 扩展名，即使它们是 Python 源文件。除了导入和调用项目中其他地方定义的主函数外，不要在其中放置任何代码。
@@ -132,7 +118,7 @@ Projectname/
 比如：`main.py` 中导入 `docs/conf.py` 中的函数
 
 ```
-from docs improt conf     # 这样的导入是不成功的
+from docs improt conf     # 这样的导入是不成功的
 ```
 
 因为 `from` 导入的是该目录即 `src` 文件下的文件夹，docs 与 src 都是顶级目录，所以导入不成功。解决方案
@@ -147,3 +133,8 @@ path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(path)
 ```
 
+
+# Reference
+
+- https://stackoverflow.com/questions/193161/what-is-the-best-project-structure-for-a-python-application
+- https://blog.ionelmc.ro/2014/05/25/python-packaging/
